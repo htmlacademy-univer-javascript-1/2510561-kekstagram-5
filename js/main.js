@@ -1,76 +1,56 @@
-const NAMES = [
-  'Мария',
-  'Алина',
-  'Алёна',
-  'Дарья',
-  'Кристина',
-  'Светлана',
-  'Вячеслав',
-  'Анастасия'
-];
+const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-const DESCRIPTIONS = [
-  'Ужин',
-  'Книги',
-  'Свечи',
-  'Слабое освещение',
-  'Природа',
-];
+const getRandomElement = (array) => array[getRandomNumber(0, array.length - 1)];
 
-const MESSAGES = [
-  'Всё отлично!',
-  'В целом всё неплохо. Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-];
-
-
-function getRandomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomElement(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function createComment() {
-  return {
-    id: getRandomNum(1, 1000),
-    avatar: img/avatar-${getRandomNum(1, 6)}.svg,
-    message: getRandomElement(messages),
+const generateComments = (count) => {
+  const messages = [
+    'Всё отлично!',
+    'В целом всё неплохо. Но не всё.',
+    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+    'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+  ];
+  const names = [
+    'Мария',
+    'Алина',
+    'Алёна',
+    'Дарья',
+    'Кристина',
+    'Светлана',
+    'Вячеслав',
+    'Анастасия'
+  ];
+  return Array.from({ length: count }, () => ({
+    id: getRandomNumber(1, 1000),
+    avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
+    message: Array.from({ length: getRandomNumber(1, 2) }, () => getRandomElement(messages)).join(' '),
     name: getRandomElement(names)
-  };
-}
+  }));
+};
 
-function createComments() {
-  const comments = [];
-  const count = getRandomNum(0, 30);
+const generatePhotos = () => {
+  const descriptions = [
+    'Закат',
+    'Осень',
+    'Вечер',
+    'Утро',
+    'Завтрак',
+    'Природа',
+    'Работа',
+    'Спорт',
+    'Книги',
+    'Планы',
+  ];
 
-  for (let i = 0; i < count; i++) {
-    comments.push(createComment());
-  }
+  return Array.from({ length: 25 }, (_, i) => ({
+    id: i + 1,
+    url: `photos/${i + 1}.jpg`,
+    description: getRandomElement(descriptions),
+    likes: getRandomNumber(15, 200),
+    comments: generateComments(getRandomNumber(0, 30))
+  }));
+};
 
-  return comments;
-}
-
-function generateObjects() {
-  const photos = [];
-
-  for (let i = 1; i <= 25; i++) {
-    const photo = {
-      id: i,
-      url: photos/${i}.jpg,
-      description: getRandomElement(descriptions),
-      likes: getRandomNum(15, 200),
-      comments: createComments()
-    };
-
-    photos.push(photo);
-  }
-
-  return photos;
-}
-
-generateObjects();
+// eslint-disable-next-line no-console
+console.log(generatePhotos());
