@@ -9,7 +9,7 @@ function isMeetingValid(startTime, endTime, meetingStart, meetingDuration) {
   const meetingStartTime = timeToMinutes(meetingStart);
   const meetingEndTime = meetingStartTime + meetingDuration;
 
- return meetingStartTime >= workStart && meetingEndTime <= workEnd;
+  return meetingStartTime >= workStart && meetingEndTime <= workEnd;
 }
 
 isMeetingValid('08:00', '17:30', '14:00', 90);
