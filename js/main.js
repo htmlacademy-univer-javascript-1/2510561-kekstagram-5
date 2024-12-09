@@ -1,2 +1,3 @@
-import './photos.js';
+import { generateObjects } from './util.js';
+generateObjects();
 
