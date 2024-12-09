@@ -15,14 +15,6 @@ let currentComments = [];
 let visibleCommentsCount = 0;
 const COMMENTS_STEP = 5;
 
-const onBigPictureEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    // eslint-disable-next-line no-use-before-define
-    closeBigPicture();
-  }
-};
-
 const createComment = (comment) => {
   const { avatar, name, message } = comment;
   const currentComment = commentTemplate.cloneNode(true);
@@ -35,12 +27,16 @@ const createComment = (comment) => {
 const updateVisibleComments = () => {
   const nextComments = currentComments.slice(visibleCommentsCount, visibleCommentsCount + COMMENTS_STEP);
   const commentFragment = document.createDocumentFragment();
+
   nextComments.forEach((comment) => {
     commentFragment.append(createComment(comment));
   });
+
   socialComments.append(commentFragment);
   visibleCommentsCount += nextComments.length;
   commentsCounter.textContent = `${visibleCommentsCount} из ${currentComments.length} комментариев`;
+
+  // Проверка, нужно ли скрывать кнопку "Загрузить ещё"
   if (visibleCommentsCount >= currentComments.length) {
     commentsLoader.classList.add('hidden');
   } else {
@@ -51,8 +47,16 @@ const updateVisibleComments = () => {
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  // eslint-disable-next-line no-use-before-define
   document.removeEventListener('keydown', onBigPictureEscKeydown);
   commentsLoader.removeEventListener('click', updateVisibleComments);
+};
+
+const onBigPictureEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
 };
 
 const onBigPictureCancelClick = () => {
@@ -68,10 +72,14 @@ const openBigPicture = (picture) => {
   bigPictureLikes.textContent = likes;
   bigPictureDescription.textContent = description;
   commentsCount.textContent = comments.length;
+  // Очистка и инициализация комментариев
   socialComments.innerHTML = '';
   currentComments = comments;
   visibleCommentsCount = 0;
+
+  // Показываем первые 5 комментариев
   updateVisibleComments();
+
   document.addEventListener('keydown', onBigPictureEscKeydown);
   bigPictureCancel.addEventListener('click', onBigPictureCancelClick);
   commentsLoader.addEventListener('click', updateVisibleComments);
