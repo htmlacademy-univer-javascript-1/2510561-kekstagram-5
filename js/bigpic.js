@@ -27,7 +27,7 @@ const createComment = (comment) => {
 const updateVisibleComments = () => {
   const nextComments = currentComments.slice(visibleCommentsCount, visibleCommentsCount + COMMENTS_STEP);
   const commentFragment = document.createDocumentFragment();
-
+  
   nextComments.forEach((comment) => {
     commentFragment.append(createComment(comment));
   });
@@ -46,7 +46,6 @@ const updateVisibleComments = () => {
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  // eslint-disable-next-line no-use-before-define
   document.removeEventListener('keydown', onBigPictureEscKeydown);
   commentsLoader.removeEventListener('click', updateVisibleComments);
 };
@@ -65,8 +64,12 @@ const onBigPictureCancelClick = () => {
 
 const openBigPicture = (picture) => {
   const { url, description, likes, comments } = picture;
+
   bigPicture.classList.remove('hidden');
+  commentsCounter.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
   document.body.classList.add('modal-open');
+
   bigPictureImage.src = url;
   bigPictureLikes.textContent = likes;
   bigPictureDescription.textContent = description;
