@@ -1,9 +1,16 @@
-import { generateObjects } from './util.js';
-import { openBigPicture } from './bigpic.js';
+import { loadData } from './api.js';
+import { showUploadErrorMessage } from './util.js';
+import { initFilters } from './filters.js';
+import { setUserFormSubmit } from './form.js';
 
-const photos = generateObjects();
-const photoElements = document.querySelectorAll('.picture');
+loadData()
+  .then((data) => {
+    initFilters(data);
+  })
+  .catch(
+    (err) => {
+      showUploadErrorMessage(err.message);
+    }
+  );
 
-photoElements.forEach((photoElement, index) => {
-  photoElement.addEventListener('click', () => openBigPicture(photos[index]));
-});
+setUserFormSubmit();
